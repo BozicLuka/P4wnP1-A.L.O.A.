@@ -1,3 +1,5 @@
+//Layout on this script is DE so you will probably have to change some things
+//Also this is not the most advanced method of doing this but it kinda works pretty well
 //ALT GR + 7 = ` = *
 //ALT GR + V = @ = \
 layout("de");
@@ -21,7 +23,7 @@ press("BACKSPACE");
 type(".txt f:");
 press("Enter");
 
-/////////////dokumenti/////////////
+/////////////documents/////////////
 
 typingSpeed(30,0);
 press("GUI r");

